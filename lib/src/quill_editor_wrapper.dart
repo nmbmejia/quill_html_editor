@@ -1108,7 +1108,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
      
            
             function getHtmlText() {
-              return this.correctULTagFromQuill(quilleditor.root.innerHTML);
+              return correctULTagFromQuill(quilleditor.root.innerHTML);
             }
  
             function getPlainText() {
