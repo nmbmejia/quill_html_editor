@@ -1092,7 +1092,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
 
             correctULTagFromQuill = (str) => {
               if (str) {
-                 let re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
+                 var re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
 
               }
               return 'test';
