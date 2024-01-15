@@ -777,6 +777,28 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             }
             // Retrieve the Quill editor container element by its ID
             var quillContainer = document.getElementById('scrolling-container');
+
+            correctULTagFromQuill = (str) => {
+              if (str) {
+                let re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
+                let strArr = str.split(re);
+
+                while (
+                  strArr.findIndex((ele) => ele === '<ol><li data-list="bullet">') !== -1
+                ) {
+                  let indx = strArr.findIndex(
+                    (ele) => ele === '<ol><li data-list="bullet">'
+                  );
+                  if (indx) {
+                    strArr[indx] = '<ul><li data-list="bullet">';
+                    let endTagIndex = strArr.findIndex((ele) => ele === "</ol>");
+                    strArr[endTagIndex] = "</ul>";
+                  }
+                }
+                return strArr.join("");
+              }
+              return str;
+            };
             
             // Add the focusout event listener to the Quill editor container
             quillContainer.addEventListener('focusout', function() {
@@ -1086,7 +1108,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
      
            
             function getHtmlText() {
-              return quilleditor.root.innerHTML;
+              return this.correctULTagFromQuill(quilleditor.root.innerHTML);
             }
  
             function getPlainText() {
@@ -1284,64 +1306,6 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
   }
 }
 
-class MyListContainer extends ListContainer {
-	static tagName = ["OL", "UL"];
-	static defaultTag = "OL";
-
-	static create(value) {
-		return document.createElement(this.getTag(value));
-	}
-
-	static getTag(val) { 
-  // Our "ql-list" values are "bullet" and "ordered"
-		const map = {
-			bullet: "UL",
-			ordered: "OL",
-		};
-		return map[val] || this.defaultTag;
-	}
-
-	checkMerge() {
-		// Only merge if the next list is the same type as this one
-		return (
-			super.checkMerge() &&
-			this.domNode.tagName == this.next.domNode.tagName
-		);
-	}
-}
-
-class MyListItem extends ListItem {
-	static requiredContainer = MyListContainer;
-
-	static register() {
-		Quill.register(MyListContainer, true);
-	}
-
-	optimize(context) {
-		if (
-			this.statics.requiredContainer &&
-			!(this.parent instanceof this.statics.requiredContainer)
-		) {
-                        // Insert the format value (bullet, ordered) into wrap arguments
-			this.wrap(
-				this.statics.requiredContainer.blotName,
-				MyListItem.formats(this.domNode)
-			);
-		}
-		super.optimize(context);
-	}
-
-	format(name, value) {
-                // If the list type is different, wrap this list item in a new MyListContainer of that type
-		if (
-			name == ListItem.blotName &&
-			value != MyListItem.formats(this.domNode)
-		) {
-			this.wrap(this.statics.requiredContainer.blotName, value);
-		}
-		super.format(name, value);
-	}
-}
 
 ///[QuillEditorController] controller constructor to generate editor, toolbar state keys
 class QuillEditorController {
@@ -1373,6 +1337,7 @@ class QuillEditorController {
   /// To avoid getting empty html tags, we are validating the html string
   /// if it doesn't contain any text, the method will return empty string instead of empty html tag
   Future<String> getText() async {
+    
     try {
       String? text = await _editorKey?.currentState?._getHtmlFromEditor();
       if (text == '<p><br></p>') {
