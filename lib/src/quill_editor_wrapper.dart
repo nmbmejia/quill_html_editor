@@ -682,6 +682,9 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             resizeObserver.observe(document.body)
           </script>
          <script>
+
+
+
           let isTextSelectionInProgress = false;
 
           // Event handler for text selection start
@@ -724,6 +727,28 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
       
         <!-- Initialize Quill editor -->
         <script>
+            function correctHtml(str) {
+               if (str) {
+                let re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
+                let strArr = str.split(re);
+
+                while (
+                  strArr.findIndex((ele) => ele === '<ol><li data-list="bullet">') !== -1
+                ) {
+                  let indx = strArr.findIndex(
+                    (ele) => ele === '<ol><li data-list="bullet">'
+                  );
+                  if (indx) {
+                    strArr[indx] = '<ul><li data-list="bullet">';
+                    let endTagIndex = strArr.findIndex((ele) => ele === "</ol>");
+                    strArr[endTagIndex] = "</ul>";
+                  }
+                }
+                return strArr.join("");
+              }
+              return str;
+            }
+     
       
             let fullWindowHeight = window.innerHeight;
             let keyboardIsProbablyOpen = false;
@@ -778,27 +803,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             // Retrieve the Quill editor container element by its ID
             var quillContainer = document.getElementById('scrolling-container');
 
-            correctULTagFromQuill = (str) => {
-              if (str) {
-                let re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
-                let strArr = str.split(re);
-
-                while (
-                  strArr.findIndex((ele) => ele === '<ol><li data-list="bullet">') !== -1
-                ) {
-                  let indx = strArr.findIndex(
-                    (ele) => ele === '<ol><li data-list="bullet">'
-                  );
-                  if (indx) {
-                    strArr[indx] = '<ul><li data-list="bullet">';
-                    let endTagIndex = strArr.findIndex((ele) => ele === "</ol>");
-                    strArr[endTagIndex] = "</ul>";
-                  }
-                }
-                return strArr.join("");
-              }
-              return str;
-            };
+          
             
             // Add the focusout event listener to the Quill editor container
             quillContainer.addEventListener('focusout', function() {
@@ -1105,10 +1110,11 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
                 UpdateFormat.postMessage(JSON.stringify(formatMap));
               }
             }
-     
+
+
            
             function getHtmlText() {
-              return correctULTagFromQuill(quilleditor.root.innerHTML);
+              return correctHtml(quilleditor.root.innerHTML);
             }
  
             function getPlainText() {
