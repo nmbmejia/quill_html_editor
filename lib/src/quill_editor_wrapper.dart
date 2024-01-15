@@ -1305,7 +1305,7 @@ class MyListContainer extends ListContainer {
 		// Only merge if the next list is the same type as this one
 		return (
 			super.checkMerge() &&
-			this.domNode.tagName === this.next.domNode.tagName
+			this.domNode.tagName == this.next.domNode.tagName
 		);
 	}
 }
@@ -1334,8 +1334,8 @@ class MyListItem extends ListItem {
 	format(name, value) {
                 // If the list type is different, wrap this list item in a new MyListContainer of that type
 		if (
-			name === ListItem.blotName &&
-			value !== MyListItem.formats(this.domNode)
+			name == ListItem.blotName &&
+			value != MyListItem.formats(this.domNode)
 		) {
 			this.wrap(this.statics.requiredContainer.blotName, value);
 		}
