@@ -727,28 +727,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
       
         <!-- Initialize Quill editor -->
         <script>
-            function correctHtml(str) {
-               if (str) {
-                let re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
-                let strArr = str.split(re);
-
-                while (
-                  strArr.findIndex((ele) => ele === '<ol><li data-list="bullet">') !== -1
-                ) {
-                  let indx = strArr.findIndex(
-                    (ele) => ele === '<ol><li data-list="bullet">'
-                  );
-                  if (indx) {
-                    strArr[indx] = '<ul><li data-list="bullet">';
-                    let endTagIndex = strArr.findIndex((ele) => ele === "</ol>");
-                    strArr[endTagIndex] = "</ul>";
-                  }
-                }
-                return strArr.join("");
-              }
-              return str;
-            }
-     
+          
       
             let fullWindowHeight = window.innerHeight;
             let keyboardIsProbablyOpen = false;
