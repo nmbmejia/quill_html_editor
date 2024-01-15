@@ -1089,31 +1089,30 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
               }
             }
 
-            correctULTagFromQuill = (str) => {
-              if (str) {
-                let re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
-                let strArr = str.split(re);
+           
+
+           
+            function getHtmlText() {
+              var str = quilleditor.root.innerHTML;
+               if (str) {
+                var re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
+                var strArr = str.split(re);
 
                 while (
-                  strArr.findIndex((ele) => ele === '<ol><li data-list="bullet">') !== -1
+                  strArr.findIndex((ele) => ele == '<ol><li data-list="bullet">') != -1
                 ) {
                   let indx = strArr.findIndex(
-                    (ele) => ele === '<ol><li data-list="bullet">'
+                    (ele) => ele == '<ol><li data-list="bullet">'
                   );
                   if (indx) {
                     strArr[indx] = '<ul><li data-list="bullet">';
-                    let endTagIndex = strArr.findIndex((ele) => ele === "</ol>");
+                    let endTagIndex = strArr.findIndex((ele) => ele == "</ol>");
                     strArr[endTagIndex] = "</ul>";
                   }
                 }
                 return strArr.join("");
               }
               return str;
-            };
-
-           
-            function getHtmlText() {
-              return quilleditor.root.innerHTML;
             }
  
             function getPlainText() {
