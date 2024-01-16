@@ -582,7 +582,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
          font-family: "$_fontFamily", sans-serif !important;
         -webkit-user-select: text !important;
         margin:0px !important;
-        background-color:${widget.backgroundColor.toRGBA()};
+        background-color:${widget.backgroundColor.toRGBA()}; 
         color: ${widget.backgroundColor.toRGBA()};
         }
         .ql-font-roboto {
@@ -945,6 +945,29 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             ResponsibilityBlot.blotName = 'responsibility';
             ResponsibilityBlot.tagName = 'responsibility';
             Quill.register(ResponsibilityBlot);
+
+            import List, {ListContainer} from 'quill/formats/list';
+
+            class UListContainer extends ListContainer {}
+            UListContainer.blotName = 'ulist-container'
+            UListContainer.tagName = 'UL'
+
+            class UListItem extends List {
+              static register() {
+                Quill.register(UListContainer);
+              }
+            }
+
+            UListItem.blotName = 'ulist';
+            UListItem.tagName = 'LI';
+
+            UListContainer.allowedChildren = [UListItem];
+            UListItem.requiredContainer = UListContainer;
+
+            Quill.register({
+              'formats/list': List,
+              'formats/ulist': UListItem,
+            });
             
              ///// quill shift enter key binding      
               var bindings = {
@@ -1090,18 +1113,16 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             }
 
 
-            correctULTagFromQuill = (str) => {
-              if (str) {
-                 var re = /(<ol><li data-list="bullet">)(.*?)(<\/ol>)/;
+            function addOL() {
+              quilleditor.format('list');
+            }
 
-              }
-              return 'test';
-            };
-           
-
+             function addUL() {
+              quilleditor.format('ulist');
+            }
            
             function getHtmlText() {
-              return correctULTagFromQuill(quilleditor.root.innerHTML);
+              return quilleditor.root.innerHTML;
             }
  
             function getPlainText() {
