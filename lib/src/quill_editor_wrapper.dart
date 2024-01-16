@@ -946,16 +946,13 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             ResponsibilityBlot.tagName = 'responsibility';
             Quill.register(ResponsibilityBlot);
 
-            import List, {ListContainer} from 'quill/formats/list';
-
+            const ListContainer = Quill.import('quill/formats/list');
             class UListContainer extends ListContainer {}
             UListContainer.blotName = 'ulist-container'
             UListContainer.tagName = 'UL'
 
             class UListItem extends List {
-              static register() {
-                Quill.register(UListContainer);
-              }
+              Quill.register(UListContainer);
             }
 
             UListItem.blotName = 'ulist';
@@ -1113,13 +1110,13 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             }
 
 
-            function addOL() {
-              quilleditor.format('list');
-            }
+            // function addOL() {
+            //   quilleditor.format('list');
+            // }
 
-             function addUL() {
-              quilleditor.format('ulist');
-            }
+            //  function addUL() {
+            //   quilleditor.format('ulist');
+            // }
            
             function getHtmlText() {
               return quilleditor.root.innerHTML;
