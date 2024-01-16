@@ -951,20 +951,20 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             UListContainer.blotName = 'ulist-container'
             UListContainer.tagName = 'UL'
 
-            class UListItem extends List {
-              Quill.register(UListContainer);
-            }
+            // class UListItem extends List {
+            //   Quill.register(UListContainer);
+            // }
 
-            UListItem.blotName = 'ulist';
-            UListItem.tagName = 'LI';
+            // UListItem.blotName = 'ulist';
+            // UListItem.tagName = 'LI';
 
-            UListContainer.allowedChildren = [UListItem];
-            UListItem.requiredContainer = UListContainer;
+            // UListContainer.allowedChildren = [UListItem];
+            // UListItem.requiredContainer = UListContainer;
 
-            Quill.register({
-              'formats/list': List,
-              'formats/ulist': UListItem,
-            });
+            // Quill.register({
+            //   'formats/list': List,
+            //   'formats/ulist': UListItem,
+            // });
             
              ///// quill shift enter key binding      
               var bindings = {
