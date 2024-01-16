@@ -946,26 +946,9 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             ResponsibilityBlot.tagName = 'responsibility';
             Quill.register(ResponsibilityBlot);
 
-            const ListContainer = Quill.import('quill/formats/list');
-            class UListContainer extends ListContainer {}
-            UListContainer.blotName = 'ulist-container'
-            UListContainer.tagName = 'UL'
+           
 
-            // class UListItem extends List {
-            //   Quill.register(UListContainer);
-            // }
-
-            // UListItem.blotName = 'ulist';
-            // UListItem.tagName = 'LI';
-
-            // UListContainer.allowedChildren = [UListItem];
-            // UListItem.requiredContainer = UListContainer;
-
-            // Quill.register({
-            //   'formats/list': List,
-            //   'formats/ulist': UListItem,
-            // });
-            
+          
              ///// quill shift enter key binding      
               var bindings = {
                   linebreak: {
@@ -1110,14 +1093,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             }
 
 
-            // function addOL() {
-            //   quilleditor.format('list');
-            // }
-
-            //  function addUL() {
-            //   quilleditor.format('ulist');
-            // }
-           
+          
             function getHtmlText() {
               return quilleditor.root.innerHTML;
             }
